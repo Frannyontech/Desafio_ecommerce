@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  kind: MyString
+  code: MyString
+  amount: 1
+  discount: MyString
+  count: 1
+  user: one
+
+two:
+  kind: MyString
+  code: MyString
+  amount: 1
+  discount: MyString
+  count: 1
+  user: two
