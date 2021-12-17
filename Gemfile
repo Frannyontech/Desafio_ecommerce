@@ -56,6 +56,7 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+  gem 'rspec-rails', '~> 5.0.0'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
@@ -66,3 +67,7 @@ gem "devise", "~> 4.6"
 gem 'bootstrap', '~> 5.1.3'
 
 gem "activemerchant", "~> 1.95"
+
+# 16/12/21
+gem 'rails-erd', group: :development
+gem 'rspec-rails', '~> 5.0.0'
