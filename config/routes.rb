@@ -2,7 +2,7 @@ Rails.application.routes.draw do
   resources :coupons
   devise_for :users
   devise_for :admins
-  root to: "home#index"
+
 
   authenticate :admin do
     resources :products
@@ -15,5 +15,8 @@ Rails.application.routes.draw do
       get  :process_paypal_payment
     end
   end
+
+  get '/item/:id', to: 'home#show', as: 'item'
+  root to: "home#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

@@ -67,10 +67,10 @@ ActiveRecord::Schema.define(version: 2021_12_16_172925) do
     t.decimal "price"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "variations_id"
+    t.bigint "variation_id"
     t.index ["order_id"], name: "index_order_items_on_order_id"
     t.index ["product_id"], name: "index_order_items_on_product_id"
-    t.index ["variations_id"], name: "index_order_items_on_variations_id"
+    t.index ["variation_id"], name: "index_order_items_on_variation_id"
   end
 
   create_table "orders", force: :cascade do |t|
@@ -107,6 +107,7 @@ ActiveRecord::Schema.define(version: 2021_12_16_172925) do
     t.text "description"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.decimal "price"
   end
 
   create_table "sizes", force: :cascade do |t|
@@ -145,7 +146,7 @@ ActiveRecord::Schema.define(version: 2021_12_16_172925) do
   add_foreign_key "coupons", "users"
   add_foreign_key "order_items", "orders"
   add_foreign_key "order_items", "products"
-  add_foreign_key "order_items", "variations", column: "variations_id"
+  add_foreign_key "order_items", "variations"
   add_foreign_key "orders", "users"
   add_foreign_key "payments", "orders"
   add_foreign_key "payments", "payment_methods"
