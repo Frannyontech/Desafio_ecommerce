@@ -1,17 +1,9 @@
 class Category < ApplicationRecord
   has_and_belongs_to_many :products, dependent: :destroy
-  validates :name, presence: true, uniqueness: true
+  has_many :children, class_name: 'Category', dependent: :destroy
+  belongs_to :parent, class_name: 'Category', foreign_key: :category_id, optional: true
 
-  def children_categories
-    Category.all.where(category_id: self.id)
-  end
+  scope :all_parents, -> {where(category_id: nil)}
+  scope :bla, -> {where.not(category_id: nil)}
 
-  def self.all_children(parent_id = nil)
-    categories_hash = {}
-
-    Category.all.where(category_id: parent_id).each do |parent|
-      categories_hash[ parent.name.to_sym ] = parent.children_categories
-    end
-    categories_hash
-  end
 end
