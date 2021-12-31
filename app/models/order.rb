@@ -1,24 +1,37 @@
 class Order < ApplicationRecord
+  before_create -> { generate_number(hash_size) }
+
   belongs_to :user
+
   has_many :order_items
   has_many :products, through: :order_items
   has_many :payments
-  has_many :variations
 
   validates :number, uniqueness: true
 
-  def total_in_cents #total a pagar
-    total * 100
+  def generate_number(size)
+    self.number ||= loop do
+      random = random_candidate(size)
+      break random unless self.class.exists?(number: random)
+    end
   end
 
-  def set_state_completed #estado de la order completado
-    update_attribute(state: "completed")
+  def random_candidate(size)
+    "#{hash_prefix}#{Array.new(size){rand(size)}.join}"
+  end
+
+  def hash_prefix
+    "BO"
+  end
+
+  def hash_size
+    9
   end
 
   def add_product(product_id, quantity)
     product = Product.find(product_id)
-    if product.variations.first && product.variations.first.stock > 0
-      order_items.create(product_id: product.id, quantity: quantity, price: product.variations.first.price)
+    if product && (product.stock > 0)
+      order_items.create(product_id: product.id, quantity: quantity, price: product.price)
       compute_total
     end
   end
@@ -30,4 +43,23 @@ class Order < ApplicationRecord
     end
     update_attribute(:total, sum)
   end
+
+  def total_cents
+    self.total * 100
+  end
+
+  def create_payment(pm_code, response_token)
+    Payment.create(
+      order_id: self.id,
+      payment_method_id: PaymentMethod.find_by(code: pm_code).id,
+      state: "processing",
+      total: self.total,
+      token: response_token
+    )
+  end
+
+  def complete!
+    update_attributes({state: "completed"})
+  end
+
 end
