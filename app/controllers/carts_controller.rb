@@ -15,6 +15,31 @@ class CartsController < ApplicationController
     @order = current_order
   end
 
+  def add_coupon #añade descuento al final
+    current_coupons = current_user.coupons
+    if current_user.coupons.present?
+      current_coupons.each do |coupon|
+        if coupon.discount == "percent"
+          current_order.update(
+            coupon_id: coupon.id,
+            total: current_order.total.to_f * ( 1 - (coupon.amount.to_f / 100))
+          )
+          coupon.update(user_id: nil)
+          redirect_to cart_path
+        elsif coupon.discount == "fixed" && current_order.total > coupon.amount
+          current_order.update(
+            coupon_id: coupon.id,
+            total: current_order.total.to_f - coupon.amount.to_f
+          )
+          coupon.update(user_id: nil)
+          redirect_to cart_path
+        else
+          flash[:alert] = "No se pudo aplicar cupon"
+        end
+      end
+    end
+  end
+  
   def pay_with_paypal
     response = EXPRESS_GATEWAY.setup_purchase( @order.total_cents,
       ip: request.remote_ip,

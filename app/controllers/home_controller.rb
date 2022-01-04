@@ -1,5 +1,6 @@
 class HomeController < ApplicationController
   def index
-    @products = Product.products_with_stock?
+    @products = Product.all
+    @variations = Variation.all
   end
 end

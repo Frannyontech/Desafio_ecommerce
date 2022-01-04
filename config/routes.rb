@@ -11,12 +11,12 @@ Rails.application.routes.draw do
 
   resource :cart, only: [:show, :update] do
     member do
+      get :add_coupon
       post :pay_with_paypal
       get  :process_paypal_payment
     end
   end
 
-  get '/item/:id', to: 'home#show', as: 'item'
   root to: "home#index"
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

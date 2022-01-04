@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_12_16_172925) do
+ActiveRecord::Schema.define(version: 2022_01_03_144915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -105,9 +105,11 @@ ActiveRecord::Schema.define(version: 2021_12_16_172925) do
   create_table "products", force: :cascade do |t|
     t.string "name"
     t.text "description"
+    t.integer "stock"
+    t.decimal "price"
+    t.string "sku"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.decimal "price"
   end
 
   create_table "sizes", force: :cascade do |t|
@@ -129,14 +131,12 @@ ActiveRecord::Schema.define(version: 2021_12_16_172925) do
   end
 
   create_table "variations", force: :cascade do |t|
-    t.decimal "price"
-    t.integer "stock"
-    t.string "sku"
     t.bigint "product_id"
     t.bigint "color_id"
     t.bigint "size_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "stock"
     t.index ["color_id"], name: "index_variations_on_color_id"
     t.index ["product_id"], name: "index_variations_on_product_id"
     t.index ["size_id"], name: "index_variations_on_size_id"
